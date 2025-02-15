@@ -1,5 +1,5 @@
 [project]
-name = "cs50-FP-jcdc"
+name = "qckcolumn"
 version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [
