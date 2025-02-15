@@ -25,7 +25,7 @@ sp_col1, sp_col2 = st.columns(2)
 input_b:int = sp_col1.number_input("Column width, b (mm)", min_value=200, value=250, step=25)
 input_h:int = sp_col1.number_input("Column height, h (mm)", min_value=200, value=250, step=25)
 input_cover:int = sp_col1.number_input("Concrete clear cover, cc (mm)", min_value=40, value=40, step=5)
-sp_col2.image("./static/gencolumndark.png", use_container_width=True)
+sp_col2.image("main/static/gencolumndark.png", use_container_width=True)
 
 sp_col4, sp_col5 = st.columns(2)
 dmain_sizes:tuple = struct.STD_REBAR_SIZES
