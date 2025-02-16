@@ -63,7 +63,7 @@ The application is fully written in Python with the following framework/librarie
 
 ### Main files
 
-1. `main.py` - Script that defines the main web application.
+1. `app.py` - Script that defines the main web application.
 2. `structural/columnconc.py` - Script containing the functions for determining the coordinates of the column interaction diagram with its respective helper functions, and for checking to adequacy and detailing requirements.
 3. `structural/genconcrete.py` - Script containing functions for general calculations of section properties, material properties, stresses, coefficients defined in the code, and constants.
 4. `structural/__init__.py` - Allows `main.py` to call the functions from `columnconc.py` and `genconcrete.py` bounded to the name `structural`. 
