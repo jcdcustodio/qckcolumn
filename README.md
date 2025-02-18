@@ -69,7 +69,7 @@ The application is fully written in Python with the following framework/librarie
 4. `structural/__init__.py` - Allows `main.py` to call the functions from `columnconc.py` and `genconcrete.py` bounded to the name `structural`. 
 5. `.streamlit/config.toml` - Config file for the Streamlit appication settings such as the theme.
 6. `static/` - Contain PNG images for the Streamlit application.
-6. `pyproject.toml` and `requirements.txt` - File for setting up working environment and installing dependencies. The former is used when using the [`uv` package manager](https://github.com/astral-sh/uv) while the latter is used for `pip`.
+6. `pyproject.toml` and `requirements.txt` - File for setting up working environment and installing dependencies. The former is used when using the [uv package manager](https://github.com/astral-sh/uv) while the latter is used for `pip`.
 
 <hr>
 
@@ -80,7 +80,7 @@ The application is fully written in Python with the following framework/librarie
 2. Ensure your current working directory is the project folder itself and check if `pyproject.toml` or `requirements.txt` is present in your working directory.
 
 3. **Installation using** `uv`
-    + [Download and install `uv`](https://docs.astral.sh/uv/#installation). 
+    + [Download and install uv](https://docs.astral.sh/uv/#installation). 
     + In the terminal, run `uv venv` to create a virtual environment. 
     + Activate venv using `<source path> .venv/bin/activate`.
     + Run `uv sync` to sync the dependencies of the environment according to the content of `pyproject.toml`.
