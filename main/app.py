@@ -214,13 +214,13 @@ if input_Pu == 0 and input_Mux == 0 and input_Muy == 0:
 else:
     adequacy_x = struct.check_col_adequacy(input_Pu=input_Pu, 
                                            input_Mu=input_Mux, 
-                                           cid_df=cid_df_x, 
+                                           cid_df=cid_df_x[:8], 
                                            col_x=cid_df_x.columns[0], 
                                            col_y=cid_df_x.columns[1])
     
     adequacy_y = struct.check_col_adequacy(input_Pu=input_Pu, 
                                            input_Mu=input_Muy, 
-                                           cid_df=cid_df_y, 
+                                           cid_df=cid_df_y[:8], 
                                            col_x=cid_df_y.columns[0], 
                                            col_y=cid_df_y.columns[1])
     
