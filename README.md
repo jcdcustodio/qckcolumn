@@ -1,5 +1,5 @@
 # QCKColumn
-Current Version: 1.0.0 (2025-02-16)
+Current Version: 1.1.0 (2025-02-18)
 
 [**Access Live Version Here**](https://qckcolumnapp.streamlit.app/)
 

@@ -80,33 +80,47 @@ cid_coordinates_x, cid_coordinates_y = [], []
 TOTAL_POINTS = 8
 
 for i in range(TOTAL_POINTS):
-    plot_result = struct.get_cid_coordinate(
+    plot_result_x = struct.get_cid_coordinate(
         b=input_b, h=input_h, ccover=input_cover, 
         d_main=input_dmain, d_trans=input_dtrans, 
         n_bar=input_nbar_b, n_bar_total=n_bar_total,
         fc=input_fc, fy=input_fy, point=(i + 1)
     )
 
-    cid_coordinates_x.append(plot_result)
+    cid_coordinates_x.append(plot_result_x)
 
-for j in range(TOTAL_POINTS):
     plot_result_y = struct.get_cid_coordinate(
         h=input_b, b=input_h, ccover=input_cover, 
         d_main=input_dmain, d_trans=input_dtrans, 
         n_bar=input_nbar_h, n_bar_total=n_bar_total,
-        fc=input_fc, fy=input_fy, point=(j + 1)
+        fc=input_fc, fy=input_fy, point=(i + 1)
     )
 
     cid_coordinates_y.append(plot_result_y)
 
+cpy_cid_coordinates_x = sorted(cid_coordinates_x[1:7], key=lambda coord: coord[0])
+cpy_cid_coordinates_y = sorted(cid_coordinates_y[1:7], key=lambda coord: coord[0])
+for j in range(TOTAL_POINTS - 2):
+    cid_coordinates_x.append((cpy_cid_coordinates_x[j][0], -cpy_cid_coordinates_x[j][1]))
+    cid_coordinates_y.append((cpy_cid_coordinates_y[j][0], -cpy_cid_coordinates_y[j][1]))
+
+
 pd.set_option("display.float_format", lambda x: "%.3f" % x)
+
+# Dataframes used for adequacy check
 cid_df_x = pd.DataFrame(cid_coordinates_x, columns=["phi_Pn", "phi_Mnx"])
 cid_df_y = pd.DataFrame(cid_coordinates_y, columns=["phi_Pn", "phi_Mny"])
 
+# Dataframes for displaying plot of interaction diagram
+close_cid_x = pd.DataFrame([{"phi_Mnx": cid_coordinates_x[0][1], "phi_Pn": cid_coordinates_x[0][0]}])
+close_cid_y = pd.DataFrame([{"phi_Mny": cid_coordinates_y[0][1], "phi_Pn": cid_coordinates_y[0][0]}])
+disp_cid_x = pd.concat([cid_df_x, close_cid_x], ignore_index=True)
+disp_cid_y = pd.concat([cid_df_y, close_cid_y], ignore_index=True)
 
-# Define charts for interaction diagram
+
+# Define charts for plot of interaction diagram
 cid_chart_x = (
-    alt.Chart(cid_df_x.reset_index())
+    alt.Chart(disp_cid_x.reset_index())
     .mark_line(point=True, color="blue") 
     .encode(
         x="phi_Mnx",
@@ -120,7 +134,7 @@ cid_chart_x = (
     )
 )
 cid_chart_y = (
-    alt.Chart(cid_df_y.reset_index())
+    alt.Chart(disp_cid_y.reset_index())
     .mark_line(point=True, color="blue") 
     .encode(
         x="phi_Mny",
@@ -135,8 +149,8 @@ cid_chart_y = (
 )
 
 # Define charts for plotting load demands on interaction diagram
-demand_point_x = pd.DataFrame({"phi_Mnx": [abs(input_Mux)], "phi_Pn": [input_Pu]})
-demand_point_y = pd.DataFrame({"phi_Mny": [abs(input_Muy)], "phi_Pn": [input_Pu]})
+demand_point_x = pd.DataFrame({"phi_Mnx": [input_Mux], "phi_Pn": [input_Pu]})
+demand_point_y = pd.DataFrame({"phi_Mny": [input_Muy], "phi_Pn": [input_Pu]})
 demand_plot_chart_x = (
     alt.Chart(demand_point_x)
     .mark_point(size=50)
@@ -162,7 +176,7 @@ demand_plot_chart_y = (
     )
 )
 
-# Overlay chart of load demand on interaction diagram
+# Overlay chart of load demand on display interaction diagram
 combined_cid_chart_x = cid_chart_x + demand_plot_chart_x
 combined_cid_chart_y = cid_chart_y + demand_plot_chart_y
 
@@ -199,16 +213,16 @@ if input_Pu == 0 and input_Mux == 0 and input_Muy == 0:
     report_adequacy = "Adequacy: **OK - No input factored load.**"
 else:
     adequacy_x = struct.check_col_adequacy(input_Pu=input_Pu, 
-                                                     input_Mu=input_Mux, 
-                                                     cid_df=cid_df_x,
-                                                     col_x=cid_df_x.columns[0],
-                                                     col_y=cid_df_x.columns[1])
+                                           input_Mu=input_Mux, 
+                                           cid_df=cid_df_x, 
+                                           col_x=cid_df_x.columns[0], 
+                                           col_y=cid_df_x.columns[1])
     
     adequacy_y = struct.check_col_adequacy(input_Pu=input_Pu, 
-                                                     input_Mu=input_Muy, 
-                                                     cid_df=cid_df_y,
-                                                     col_x=cid_df_y.columns[0],
-                                                     col_y=cid_df_y.columns[1])
+                                           input_Mu=input_Muy, 
+                                           cid_df=cid_df_y, 
+                                           col_x=cid_df_y.columns[0], 
+                                           col_y=cid_df_y.columns[1])
     
     report_adequacy = f"Adequacy: **{render_adequacy_status(adequacy_x, adequacy_y)}**" 
 
